@@ -1,9 +1,13 @@
 package main
 
 import (
-	"github.com/ecshreve/cardz/internal/blackjack"
+	"fmt"
+
+	"github.com/ecshreve/cardz/internal/deck"
 )
 
 func main() {
-	blackjack.Play()
+	d := deck.NewDeck()
+	c := d.Cards[11]
+	fmt.Println(c.PrettyPrint())
 }
