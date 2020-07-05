@@ -61,7 +61,6 @@ func NewDeck() *Deck {
 				Code:  code,
 				Value: CardCodeToValueMap[code],
 			}
-			fmt.Println(c.PrettyPrint())
 			d.Cards = append(d.Cards, c)
 		}
 	}
