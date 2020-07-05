@@ -134,3 +134,13 @@ func (d *Deck) ShuffleRemaining() {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(d.Cards), func(i, j int) { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] })
 }
+
+// ReShuffle puts the Dealt cards back into the Cards slice and shuffles all of
+// them together.
+func (d *Deck) ReShuffle() {
+	d.Cards = append(d.Cards, d.Dealt...)
+	d.Dealt = []Card{}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(d.Cards), func(i, j int) { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] })
+}

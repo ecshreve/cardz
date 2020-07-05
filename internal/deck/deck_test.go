@@ -105,3 +105,28 @@ func TestShuffleRemaining(t *testing.T) {
 	testDeck.ShuffleRemaining()
 	assert.NotEqual(t, beforeShuffle, testDeck.Cards)
 }
+
+func TestReShuffle(t *testing.T) {
+	testDeck := deck.NewDeck()
+
+	// Save a copy of the Deck before we do anything.
+	var beforeShuffle = make([]deck.Card, len(testDeck.Cards))
+	copy(beforeShuffle, testDeck.Cards)
+	assert.Equal(t, beforeShuffle, testDeck.Cards)
+
+	// Deal some Cards out.
+	cards, err := testDeck.DealMany(22)
+	assert.NotNil(t, cards)
+	assert.Equal(t, 22, len(cards))
+	assert.NoError(t, err)
+	assert.Equal(t, 30, len(testDeck.Cards))
+	assert.Equal(t, 22, len(testDeck.Dealt))
+
+	// Shuffle everything.
+	testDeck.ReShuffle()
+	assert.Equal(t, 52, len(testDeck.Cards))
+	assert.Equal(t, 0, len(testDeck.Dealt))
+
+	// Make sure they're shuffled.
+	assert.NotEqual(t, beforeShuffle, testDeck.Cards)
+}
