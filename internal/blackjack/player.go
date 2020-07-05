@@ -1,71 +1,27 @@
 package blackjack
 
-import (
-	"strconv"
-
-	"github.com/ecshreve/cardz/internal/deck"
-	"github.com/rivo/tview"
-)
-
 // Player represents either a human player or the CPU dealer.
 type Player struct {
 	Hand
 	IsDealer bool
 }
 
-// dealerTurn takes care of the logic for the Dealer's hitting/standing.
-func (p *Player) dealerTurn(d *deck.Deck) {
-	for p.Hand.Total < 17 {
-		c, _ := d.DealOne()
-		p.addCard(*c)
-
-		app.QueueUpdateDraw(func() {
-			dealerFlex.Clear()
-			dealerScore := tview.NewTextView().SetText(strconv.Itoa(p.Hand.Total)).SetTextAlign(1)
-			dealerScore.SetBorder(true)
-			dealerFlex.AddItem(dealerScore, 10, 1, false)
-			for _, card := range p.Hand.Cards {
-				dealerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
-				dealerFlex.AddItem(dealerArea, 0, 1, false)
-			}
-		})
-	}
-}
-
-// takeTurn contains the main hit/stand loop for the player.
-func (p *Player) takeTurn(d *deck.Deck) {
-	if p.IsDealer {
-		p.dealerTurn(d)
-		return
+// takeTurn contains the main hit/stay loop for the player and dealer.
+func (bg *BlackjackGame) takeTurn() {
+	// Do the human player's turn.
+	bg.PlayerTurn = true
+	for bg.PlayerTurn {
+		if bg.Player.Bust {
+			bg.PlayerTurn = false
+			return
+		}
 	}
 
-	turnDone := false
-	for !turnDone {
-		app.QueueUpdateDraw(func() {
-			actionButtons.Clear(true)
-			actionButtons.AddButton("HIT", func() {
-				c, _ := d.DealOne()
-				p.addCard(*c)
-				playerFlex.Clear()
-				playerScore := tview.NewTextView().SetText(strconv.Itoa(p.Hand.Total)).SetTextAlign(1)
-				playerScore.SetBorder(true)
-				playerFlex.AddItem(playerScore, 10, 0, false)
-				for _, card := range p.Hand.Cards {
-					playerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
-					playerFlex.AddItem(playerArea, 0, 1, false)
-				}
-
-				if p.Bust {
-					turnDone = true
-					return
-				}
-			})
-			actionButtons.AddButton("STAY", func() {
-				turnDone = true
-				return
-			})
-			app.SetFocus(actionButtons).Run()
-		})
+	// Do the dealer's turn.
+	for bg.Dealer.Hand.Total < 17 {
+		c, _ := bg.Deck.DealOne()
+		bg.Dealer.addCard(*c)
+		bg.HasUpdate = true
 	}
 }
 

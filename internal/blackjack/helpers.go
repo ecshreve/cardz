@@ -7,26 +7,24 @@ import (
 
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
-
-	"github.com/ecshreve/cardz/internal/deck"
 )
 
 // deal clears the player and dealer Hands and deals the first two Cards.
-func deal(player, dealer *Player, d *deck.Deck) {
-	player.Hand = Hand{}
-	dealer.Hand = Hand{}
+func (bg *BlackjackGame) deal() {
+	bg.Player.Hand = Hand{}
+	bg.Dealer.Hand = Hand{}
 
-	c, _ := d.DealOne()
-	player.Hand.addCard(*c)
+	c, _ := bg.Deck.DealOne()
+	bg.Player.Hand.addCard(*c)
 
-	c, _ = d.DealOne()
-	dealer.Hand.addCard(*c)
+	c, _ = bg.Deck.DealOne()
+	bg.Dealer.Hand.addCard(*c)
 
-	c, _ = d.DealOne()
-	player.Hand.addCard(*c)
+	c, _ = bg.Deck.DealOne()
+	bg.Player.Hand.addCard(*c)
 
-	c, _ = d.DealOne()
-	dealer.Hand.addCard(*c)
+	c, _ = bg.Deck.DealOne()
+	bg.Dealer.Hand.addCard(*c)
 }
 
 // getWinner returns the winning Player, or nil in the case of a push.
