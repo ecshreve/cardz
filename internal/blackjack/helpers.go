@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gdamore/tcell"
+	"github.com/rivo/tview"
+
 	"github.com/ecshreve/cardz/internal/deck"
 )
 
@@ -58,4 +61,18 @@ func continueGame() bool {
 	}
 
 	return char == 'y'
+}
+
+var customCliTheme = tview.Theme{
+	PrimitiveBackgroundColor:    tcell.Color(272727),
+	ContrastBackgroundColor:     tcell.Color(448488),
+	MoreContrastBackgroundColor: tcell.ColorGreen,
+	BorderColor:                 tcell.ColorWhite,
+	TitleColor:                  tcell.ColorWhite,
+	GraphicsColor:               tcell.ColorWhite,
+	PrimaryTextColor:            tcell.ColorWhite,
+	SecondaryTextColor:          tcell.ColorYellow,
+	TertiaryTextColor:           tcell.ColorGreen,
+	InverseTextColor:            tcell.Color(448488),
+	ContrastSecondaryTextColor:  tcell.ColorDarkCyan,
 }
