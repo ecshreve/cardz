@@ -93,7 +93,7 @@ func TestDealMany(t *testing.T) {
 	assert.Equal(t, 52, len(testDeck.Dealt))
 }
 
-func TestShuffle(t *testing.T) {
+func TestShuffleRemaining(t *testing.T) {
 	testDeck := deck.NewDeck()
 
 	// Save a copy of the Deck before we Shuffle.
@@ -102,6 +102,6 @@ func TestShuffle(t *testing.T) {
 	assert.Equal(t, beforeShuffle, testDeck.Cards)
 
 	// Make sure the shuffled Deck is not the same as it was before.
-	testDeck.Shuffle()
+	testDeck.ShuffleRemaining()
 	assert.NotEqual(t, beforeShuffle, testDeck.Cards)
 }

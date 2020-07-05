@@ -128,8 +128,9 @@ func (d *Deck) DealMany(numToDeal int) ([]Card, error) {
 	return cards, nil
 }
 
-// Shuffle is pretty self-explanatory, it shuffles the Deck.
-func (d *Deck) Shuffle() {
+// ShuffleRemaining is pretty self-explanatory, it shuffles the remaining Cars in
+// the Deck.
+func (d *Deck) ShuffleRemaining() {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(d.Cards), func(i, j int) { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] })
 }
