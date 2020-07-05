@@ -1,5 +1,11 @@
 package deck
 
+import (
+	"fmt"
+
+	"github.com/samsarahq/go/oops"
+)
+
 // Suit represents one of the 4 suits in a standard 52 card Deck.
 type Suit int
 
@@ -11,6 +17,14 @@ const (
 	Clubs
 	Spades
 )
+
+func (s Suit) String() string {
+	suitNames := []string{"hearts", "diamonds", "clubs", "spades"}
+	if int(s) > 3 {
+		return "bad suit"
+	}
+	return suitNames[int(s)]
+}
 
 // CardValueToCodeMap maps a Card.Value to a Card's single character code.
 var CardValueToCodeMap = map[int]string{
@@ -48,10 +62,14 @@ var CardValueToNameMap = map[int]string{
 
 // Card is a single playing card within a Deck.
 type Card struct {
-	Name  string
-	Suit  Suit
+	Name string
+	Suit
 	Code  string
 	Value int
+}
+
+func (c Card) String() string {
+	return fmt.Sprintf("%s  -  %v\n", c.Name, c.Suit)
 }
 
 // Deck stores a slice of Cards remaining in the deck, as well as a slice of Cards
@@ -82,9 +100,15 @@ func NewDeck() *Deck {
 }
 
 // DealOne returns the first Card in the Deck, or an error if no cards are left.
-func (d *Deck) DealOne() (Card, error) {
+func (d *Deck) DealOne() (*Card, error) {
+	if len(d.Cards) <= 0 {
+		return nil, oops.Errorf("no more cards left in the deck")
+	}
+
 	dealt := d.Cards[0]
 	d.Dealt = append(d.Dealt, dealt)
-	return dealt, nil
+	d.Cards = append(d.Cards[:0], d.Cards[1:]...)
+
+	return &dealt, nil
 
 }

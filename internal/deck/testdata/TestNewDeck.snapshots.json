@@ -1,0 +1,324 @@
+[
+  {
+    "Name": "basic new deck",
+    "Values": [
+      {
+        "Cards": [
+          {
+            "Code": "A",
+            "Name": "Ace",
+            "Suit": 0,
+            "Value": 1
+          },
+          {
+            "Code": "2",
+            "Name": "Two",
+            "Suit": 0,
+            "Value": 2
+          },
+          {
+            "Code": "3",
+            "Name": "Three",
+            "Suit": 0,
+            "Value": 3
+          },
+          {
+            "Code": "4",
+            "Name": "Four",
+            "Suit": 0,
+            "Value": 4
+          },
+          {
+            "Code": "5",
+            "Name": "Five",
+            "Suit": 0,
+            "Value": 5
+          },
+          {
+            "Code": "6",
+            "Name": "Six",
+            "Suit": 0,
+            "Value": 6
+          },
+          {
+            "Code": "7",
+            "Name": "Seven",
+            "Suit": 0,
+            "Value": 7
+          },
+          {
+            "Code": "8",
+            "Name": "Eight",
+            "Suit": 0,
+            "Value": 8
+          },
+          {
+            "Code": "9",
+            "Name": "Nine",
+            "Suit": 0,
+            "Value": 9
+          },
+          {
+            "Code": "T",
+            "Name": "Ten",
+            "Suit": 0,
+            "Value": 10
+          },
+          {
+            "Code": "J",
+            "Name": "Jack",
+            "Suit": 0,
+            "Value": 11
+          },
+          {
+            "Code": "Q",
+            "Name": "Queen",
+            "Suit": 0,
+            "Value": 12
+          },
+          {
+            "Code": "K",
+            "Name": "King",
+            "Suit": 0,
+            "Value": 13
+          },
+          {
+            "Code": "A",
+            "Name": "Ace",
+            "Suit": 1,
+            "Value": 1
+          },
+          {
+            "Code": "2",
+            "Name": "Two",
+            "Suit": 1,
+            "Value": 2
+          },
+          {
+            "Code": "3",
+            "Name": "Three",
+            "Suit": 1,
+            "Value": 3
+          },
+          {
+            "Code": "4",
+            "Name": "Four",
+            "Suit": 1,
+            "Value": 4
+          },
+          {
+            "Code": "5",
+            "Name": "Five",
+            "Suit": 1,
+            "Value": 5
+          },
+          {
+            "Code": "6",
+            "Name": "Six",
+            "Suit": 1,
+            "Value": 6
+          },
+          {
+            "Code": "7",
+            "Name": "Seven",
+            "Suit": 1,
+            "Value": 7
+          },
+          {
+            "Code": "8",
+            "Name": "Eight",
+            "Suit": 1,
+            "Value": 8
+          },
+          {
+            "Code": "9",
+            "Name": "Nine",
+            "Suit": 1,
+            "Value": 9
+          },
+          {
+            "Code": "T",
+            "Name": "Ten",
+            "Suit": 1,
+            "Value": 10
+          },
+          {
+            "Code": "J",
+            "Name": "Jack",
+            "Suit": 1,
+            "Value": 11
+          },
+          {
+            "Code": "Q",
+            "Name": "Queen",
+            "Suit": 1,
+            "Value": 12
+          },
+          {
+            "Code": "K",
+            "Name": "King",
+            "Suit": 1,
+            "Value": 13
+          },
+          {
+            "Code": "A",
+            "Name": "Ace",
+            "Suit": 2,
+            "Value": 1
+          },
+          {
+            "Code": "2",
+            "Name": "Two",
+            "Suit": 2,
+            "Value": 2
+          },
+          {
+            "Code": "3",
+            "Name": "Three",
+            "Suit": 2,
+            "Value": 3
+          },
+          {
+            "Code": "4",
+            "Name": "Four",
+            "Suit": 2,
+            "Value": 4
+          },
+          {
+            "Code": "5",
+            "Name": "Five",
+            "Suit": 2,
+            "Value": 5
+          },
+          {
+            "Code": "6",
+            "Name": "Six",
+            "Suit": 2,
+            "Value": 6
+          },
+          {
+            "Code": "7",
+            "Name": "Seven",
+            "Suit": 2,
+            "Value": 7
+          },
+          {
+            "Code": "8",
+            "Name": "Eight",
+            "Suit": 2,
+            "Value": 8
+          },
+          {
+            "Code": "9",
+            "Name": "Nine",
+            "Suit": 2,
+            "Value": 9
+          },
+          {
+            "Code": "T",
+            "Name": "Ten",
+            "Suit": 2,
+            "Value": 10
+          },
+          {
+            "Code": "J",
+            "Name": "Jack",
+            "Suit": 2,
+            "Value": 11
+          },
+          {
+            "Code": "Q",
+            "Name": "Queen",
+            "Suit": 2,
+            "Value": 12
+          },
+          {
+            "Code": "K",
+            "Name": "King",
+            "Suit": 2,
+            "Value": 13
+          },
+          {
+            "Code": "A",
+            "Name": "Ace",
+            "Suit": 3,
+            "Value": 1
+          },
+          {
+            "Code": "2",
+            "Name": "Two",
+            "Suit": 3,
+            "Value": 2
+          },
+          {
+            "Code": "3",
+            "Name": "Three",
+            "Suit": 3,
+            "Value": 3
+          },
+          {
+            "Code": "4",
+            "Name": "Four",
+            "Suit": 3,
+            "Value": 4
+          },
+          {
+            "Code": "5",
+            "Name": "Five",
+            "Suit": 3,
+            "Value": 5
+          },
+          {
+            "Code": "6",
+            "Name": "Six",
+            "Suit": 3,
+            "Value": 6
+          },
+          {
+            "Code": "7",
+            "Name": "Seven",
+            "Suit": 3,
+            "Value": 7
+          },
+          {
+            "Code": "8",
+            "Name": "Eight",
+            "Suit": 3,
+            "Value": 8
+          },
+          {
+            "Code": "9",
+            "Name": "Nine",
+            "Suit": 3,
+            "Value": 9
+          },
+          {
+            "Code": "T",
+            "Name": "Ten",
+            "Suit": 3,
+            "Value": 10
+          },
+          {
+            "Code": "J",
+            "Name": "Jack",
+            "Suit": 3,
+            "Value": 11
+          },
+          {
+            "Code": "Q",
+            "Name": "Queen",
+            "Suit": 3,
+            "Value": 12
+          },
+          {
+            "Code": "K",
+            "Name": "King",
+            "Suit": 3,
+            "Value": 13
+          }
+        ],
+        "Dealt": []
+      }
+    ]
+  }
+]
