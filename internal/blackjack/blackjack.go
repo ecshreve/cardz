@@ -8,6 +8,7 @@ import (
 	"github.com/ecshreve/cardz/internal/deck"
 )
 
+// Hand store the Player's Cards and some other useful data.
 type Hand struct {
 	Cards []deck.Card
 	Total int
@@ -16,97 +17,82 @@ type Hand struct {
 	Bust bool
 }
 
+// Implement the Stringer interface for the Hand type.
 func (h Hand) String() string {
 	return fmt.Sprintf("total: %d -- bust: %v\ncards:\n%+v\n", h.Total, h.Bust, h.Cards)
 }
 
-func (h *Hand) AddCard(c deck.Card) {
+// addCard adds a Card to the Player's hand and recalculates the Hand total, also
+// updates the Bust field depending on the Total.
+func (h *Hand) addCard(c deck.Card) {
 	h.Cards = append(h.Cards, c)
 	h.Total += c.Value
 	h.Bust = h.Total > 21
 }
 
+// Player represents either a human player or the CPU dealer.
 type Player struct {
 	Hand
 	IsDealer bool
 }
 
+// Play contains the main game loop for this silly blackjack game.
 func Play() {
 	d := deck.NewDeck()
 	d.ShuffleRemaining()
 
-	player := &Player{}
+	player := &Player{IsDealer: false}
 	dealer := &Player{IsDealer: true}
-
 	continueGame := true
+
+	// Loop until the player decides they don't want to play anymore.
 	for continueGame {
 		if len(d.Cards) < 26 {
 			d.ReShuffle()
 		}
-		player.Hand = Hand{}
-		dealer.Hand = Hand{}
 
-		// Deal out the initial 2 cards.
-		c, _ := d.DealOne()
-		player.Hand.AddCard(*c)
-
-		c, _ = d.DealOne()
-		dealer.Hand.AddCard(*c)
-
-		c, _ = d.DealOne()
-		player.Hand.AddCard(*c)
-
-		c, _ = d.DealOne()
-		dealer.Hand.AddCard(*c)
-
-		fmt.Println("player")
-		fmt.Println(player.Hand)
-		fmt.Println("dealer")
+		deal(player, dealer, d)
+		fmt.Println("dealer: ")
 		fmt.Println(dealer.Hand)
+		fmt.Println("---")
+		fmt.Println("player: ")
+		fmt.Println(player.Hand)
 
-		// player's turn
-		player.TakeTurn(d)
-		if player.Bust {
-			continueGame = ContinueGame()
-			continue
+		player.takeTurn(d)
+		if !player.Bust {
+			dealer.takeTurn(d)
 		}
 
-		// dealer's turn
-		dealer.TakeTurn(d)
-		if dealer.Bust {
-			continueGame = ContinueGame()
-			continue
-		}
+		winner := getWinner(player, dealer)
+		continueGame = handleHandEnd(winner)
+	}
 
-		if player.Total > dealer.Total {
-			fmt.Println("yay you won!")
-		} else {
-			fmt.Println("you lost :(")
-		}
+	fmt.Println("thanks for playing!")
+}
 
-		continueGame = ContinueGame()
+func (p *Player) dealerTurn(d *deck.Deck) {
+	for p.Hand.Total < 17 {
+		c, _ := d.DealOne()
+		p.addCard(*c)
+		fmt.Printf("---\ndealer:\n")
+		fmt.Println(p.Hand)
+	}
+	if p.Bust {
+		fmt.Println("dealer busted :)")
 	}
 }
 
-func (p *Player) TakeTurn(d *deck.Deck) {
+func (p *Player) takeTurn(d *deck.Deck) {
 	if p.IsDealer {
-		for p.Hand.Total < 17 {
-			c, _ := d.DealOne()
-			fmt.Println(c)
-			p.AddCard(*c)
-			fmt.Println(p.Hand)
-		}
-		if p.Bust {
-			fmt.Println("dealer busted :)")
-		}
+		p.dealerTurn(d)
 		return
 	}
 
+	// This is the Hit/Stand loop for the player.
 	for {
 		fmt.Println("press 'h' to hit, or 's' to stand; followed by 'enter'")
 		reader := bufio.NewReader(os.Stdin)
 		char, _, err := reader.ReadRune()
-
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -114,11 +100,11 @@ func (p *Player) TakeTurn(d *deck.Deck) {
 		switch char {
 		case 'h':
 			c, _ := d.DealOne()
-			fmt.Println(c)
-			p.AddCard(*c)
+			p.addCard(*c)
+			fmt.Printf("---\nplayer:\n")
 			fmt.Println(p.Hand)
 			if p.Bust {
-				fmt.Println("player busted :(")
+				fmt.Println("busted :(")
 				return
 			}
 			break
@@ -129,11 +115,61 @@ func (p *Player) TakeTurn(d *deck.Deck) {
 	}
 }
 
-func ContinueGame() bool {
+// deal clears the player and dealer Hands and deals the first two Cards.
+func deal(player, dealer *Player, d *deck.Deck) {
+	player.Hand = Hand{}
+	dealer.Hand = Hand{}
+
+	c, _ := d.DealOne()
+	player.Hand.addCard(*c)
+
+	c, _ = d.DealOne()
+	dealer.Hand.addCard(*c)
+
+	c, _ = d.DealOne()
+	player.Hand.addCard(*c)
+
+	c, _ = d.DealOne()
+	dealer.Hand.addCard(*c)
+}
+
+// getWinner returns the winning Player, or nil in the case of a push.
+func getWinner(player, dealer *Player) *Player {
+	if player.Bust {
+		return dealer
+	}
+
+	if dealer.Bust {
+		return player
+	}
+
+	if player.Total > dealer.Total {
+		return player
+	}
+
+	if dealer.Total > player.Total {
+		return dealer
+	}
+
+	return nil
+}
+
+// handleHandEnd prints a game over message and checks if the player wants to continue.
+func handleHandEnd(p *Player) bool {
+	retStr := "yay you won!"
+	if p.IsDealer {
+		retStr = "better luck next time!"
+	}
+	fmt.Println(retStr)
+	return continueGame()
+}
+
+// continueGame prompts the user to see if they want to play another hand.
+func continueGame() bool {
 	fmt.Println("do you want to play another hand? (y/n) followed by 'enter'")
+
 	reader := bufio.NewReader(os.Stdin)
 	char, _, err := reader.ReadRune()
-
 	if err != nil {
 		fmt.Println(err)
 	}
