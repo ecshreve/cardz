@@ -6,313 +6,313 @@
         "Cards": [
           {
             "Code": "A",
-            "Name": "Ace",
+            "Name": "ace",
             "Suit": 0,
             "Value": 1
           },
           {
             "Code": "2",
-            "Name": "Two",
+            "Name": "two",
             "Suit": 0,
             "Value": 2
           },
           {
             "Code": "3",
-            "Name": "Three",
+            "Name": "three",
             "Suit": 0,
             "Value": 3
           },
           {
             "Code": "4",
-            "Name": "Four",
+            "Name": "four",
             "Suit": 0,
             "Value": 4
           },
           {
             "Code": "5",
-            "Name": "Five",
+            "Name": "five",
             "Suit": 0,
             "Value": 5
           },
           {
             "Code": "6",
-            "Name": "Six",
+            "Name": "six",
             "Suit": 0,
             "Value": 6
           },
           {
             "Code": "7",
-            "Name": "Seven",
+            "Name": "seven",
             "Suit": 0,
             "Value": 7
           },
           {
             "Code": "8",
-            "Name": "Eight",
+            "Name": "eight",
             "Suit": 0,
             "Value": 8
           },
           {
             "Code": "9",
-            "Name": "Nine",
+            "Name": "nine",
             "Suit": 0,
             "Value": 9
           },
           {
             "Code": "T",
-            "Name": "Ten",
+            "Name": "ten",
             "Suit": 0,
             "Value": 10
           },
           {
             "Code": "J",
-            "Name": "Jack",
+            "Name": "jack",
             "Suit": 0,
             "Value": 11
           },
           {
             "Code": "Q",
-            "Name": "Queen",
+            "Name": "queen",
             "Suit": 0,
             "Value": 12
           },
           {
             "Code": "K",
-            "Name": "King",
+            "Name": "king",
             "Suit": 0,
             "Value": 13
           },
           {
             "Code": "A",
-            "Name": "Ace",
+            "Name": "ace",
             "Suit": 1,
             "Value": 1
           },
           {
             "Code": "2",
-            "Name": "Two",
+            "Name": "two",
             "Suit": 1,
             "Value": 2
           },
           {
             "Code": "3",
-            "Name": "Three",
+            "Name": "three",
             "Suit": 1,
             "Value": 3
           },
           {
             "Code": "4",
-            "Name": "Four",
+            "Name": "four",
             "Suit": 1,
             "Value": 4
           },
           {
             "Code": "5",
-            "Name": "Five",
+            "Name": "five",
             "Suit": 1,
             "Value": 5
           },
           {
             "Code": "6",
-            "Name": "Six",
+            "Name": "six",
             "Suit": 1,
             "Value": 6
           },
           {
             "Code": "7",
-            "Name": "Seven",
+            "Name": "seven",
             "Suit": 1,
             "Value": 7
           },
           {
             "Code": "8",
-            "Name": "Eight",
+            "Name": "eight",
             "Suit": 1,
             "Value": 8
           },
           {
             "Code": "9",
-            "Name": "Nine",
+            "Name": "nine",
             "Suit": 1,
             "Value": 9
           },
           {
             "Code": "T",
-            "Name": "Ten",
+            "Name": "ten",
             "Suit": 1,
             "Value": 10
           },
           {
             "Code": "J",
-            "Name": "Jack",
+            "Name": "jack",
             "Suit": 1,
             "Value": 11
           },
           {
             "Code": "Q",
-            "Name": "Queen",
+            "Name": "queen",
             "Suit": 1,
             "Value": 12
           },
           {
             "Code": "K",
-            "Name": "King",
+            "Name": "king",
             "Suit": 1,
             "Value": 13
           },
           {
             "Code": "A",
-            "Name": "Ace",
+            "Name": "ace",
             "Suit": 2,
             "Value": 1
           },
           {
             "Code": "2",
-            "Name": "Two",
+            "Name": "two",
             "Suit": 2,
             "Value": 2
           },
           {
             "Code": "3",
-            "Name": "Three",
+            "Name": "three",
             "Suit": 2,
             "Value": 3
           },
           {
             "Code": "4",
-            "Name": "Four",
+            "Name": "four",
             "Suit": 2,
             "Value": 4
           },
           {
             "Code": "5",
-            "Name": "Five",
+            "Name": "five",
             "Suit": 2,
             "Value": 5
           },
           {
             "Code": "6",
-            "Name": "Six",
+            "Name": "six",
             "Suit": 2,
             "Value": 6
           },
           {
             "Code": "7",
-            "Name": "Seven",
+            "Name": "seven",
             "Suit": 2,
             "Value": 7
           },
           {
             "Code": "8",
-            "Name": "Eight",
+            "Name": "eight",
             "Suit": 2,
             "Value": 8
           },
           {
             "Code": "9",
-            "Name": "Nine",
+            "Name": "nine",
             "Suit": 2,
             "Value": 9
           },
           {
             "Code": "T",
-            "Name": "Ten",
+            "Name": "ten",
             "Suit": 2,
             "Value": 10
           },
           {
             "Code": "J",
-            "Name": "Jack",
+            "Name": "jack",
             "Suit": 2,
             "Value": 11
           },
           {
             "Code": "Q",
-            "Name": "Queen",
+            "Name": "queen",
             "Suit": 2,
             "Value": 12
           },
           {
             "Code": "K",
-            "Name": "King",
+            "Name": "king",
             "Suit": 2,
             "Value": 13
           },
           {
             "Code": "A",
-            "Name": "Ace",
+            "Name": "ace",
             "Suit": 3,
             "Value": 1
           },
           {
             "Code": "2",
-            "Name": "Two",
+            "Name": "two",
             "Suit": 3,
             "Value": 2
           },
           {
             "Code": "3",
-            "Name": "Three",
+            "Name": "three",
             "Suit": 3,
             "Value": 3
           },
           {
             "Code": "4",
-            "Name": "Four",
+            "Name": "four",
             "Suit": 3,
             "Value": 4
           },
           {
             "Code": "5",
-            "Name": "Five",
+            "Name": "five",
             "Suit": 3,
             "Value": 5
           },
           {
             "Code": "6",
-            "Name": "Six",
+            "Name": "six",
             "Suit": 3,
             "Value": 6
           },
           {
             "Code": "7",
-            "Name": "Seven",
+            "Name": "seven",
             "Suit": 3,
             "Value": 7
           },
           {
             "Code": "8",
-            "Name": "Eight",
+            "Name": "eight",
             "Suit": 3,
             "Value": 8
           },
           {
             "Code": "9",
-            "Name": "Nine",
+            "Name": "nine",
             "Suit": 3,
             "Value": 9
           },
           {
             "Code": "T",
-            "Name": "Ten",
+            "Name": "ten",
             "Suit": 3,
             "Value": 10
           },
           {
             "Code": "J",
-            "Name": "Jack",
+            "Name": "jack",
             "Suit": 3,
             "Value": 11
           },
           {
             "Code": "Q",
-            "Name": "Queen",
+            "Name": "queen",
             "Suit": 3,
             "Value": 12
           },
           {
             "Code": "K",
-            "Name": "King",
+            "Name": "king",
             "Suit": 3,
             "Value": 13
           }

@@ -45,19 +45,19 @@ var CardValueToCodeMap = map[int]string{
 
 // CardValueToNameMap maps a Card.Value to a Card's string name.
 var CardValueToNameMap = map[int]string{
-	1:  "Ace",
-	2:  "Two",
-	3:  "Three",
-	4:  "Four",
-	5:  "Five",
-	6:  "Six",
-	7:  "Seven",
-	8:  "Eight",
-	9:  "Nine",
-	10: "Ten",
-	11: "Jack",
-	12: "Queen",
-	13: "King",
+	1:  "ace",
+	2:  "two",
+	3:  "three",
+	4:  "four",
+	5:  "five",
+	6:  "six",
+	7:  "seven",
+	8:  "eight",
+	9:  "nine",
+	10: "ten",
+	11: "jack",
+	12: "queen",
+	13: "king",
 }
 
 // Card is a single playing card within a Deck.
