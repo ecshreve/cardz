@@ -111,3 +111,17 @@ func (d *Deck) DealOne() (*Card, error) {
 
 	return &dealt, nil
 }
+
+// DealMany returns the requested number of Cards, or an error if there aren't
+// enough in the Deck.
+func (d *Deck) DealMany(numToDeal int) ([]Card, error) {
+	if len(d.Cards)-numToDeal < 0 {
+		return nil, oops.Errorf("not enough cards in the deck, deck: %d - requested: %d", len(d.Cards), numToDeal)
+	}
+
+	cards := d.Cards[:numToDeal]
+	d.Dealt = append(d.Dealt, cards...)
+	d.Cards = d.Cards[numToDeal:]
+
+	return cards, nil
+}
