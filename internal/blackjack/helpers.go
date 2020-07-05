@@ -1,10 +1,6 @@
 package blackjack
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 )
@@ -28,37 +24,24 @@ func (bg *BlackjackGame) deal() {
 }
 
 // getWinner returns the winning Player, or nil in the case of a push.
-func getWinner(player, dealer *Player) *Player {
-	if player.Bust {
-		return dealer
+func (bg BlackjackGame) getWinner() *Player {
+	if bg.Player.Bust {
+		return bg.Dealer
 	}
 
-	if dealer.Bust {
-		return player
+	if bg.Dealer.Bust {
+		return bg.Player
 	}
 
-	if player.Total > dealer.Total {
-		return player
+	if bg.Player.Total > bg.Dealer.Total {
+		return bg.Player
 	}
 
-	if dealer.Total > player.Total {
-		return dealer
+	if bg.Dealer.Total > bg.Player.Total {
+		return bg.Dealer
 	}
 
 	return nil
-}
-
-// continueGame prompts the user to see if they want to play another hand.
-func continueGame() bool {
-	fmt.Println("do you want to play another hand? (y/n) followed by 'enter'")
-
-	reader := bufio.NewReader(os.Stdin)
-	char, _, err := reader.ReadRune()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return char == 'y'
 }
 
 var customCliTheme = tview.Theme{

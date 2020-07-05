@@ -1,8 +1,8 @@
 package blackjack
 
 import (
-	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gdamore/tcell"
@@ -19,13 +19,20 @@ var playerFlex *tview.Flex
 var statusFlex *tview.Flex
 var hitButton *tview.Button
 var stayButton *tview.Button
+var yesButton *tview.Button
+var noButton *tview.Button
+
+var continuePlaying = make(chan bool)
+var dealerTurn = make(chan bool)
 
 type BlackjackGame struct {
-	Player     *Player
-	Dealer     *Player
-	Deck       *deck.Deck
-	PlayerTurn bool
-	HasUpdate  bool
+	Player          *Player
+	Dealer          *Player
+	Deck            *deck.Deck
+	HasUpdate       bool
+	PlayerTurn      bool
+	HandComplete    bool
+	ContinuePlaying bool
 }
 
 func update(bg *BlackjackGame) {
@@ -64,6 +71,7 @@ func update(bg *BlackjackGame) {
 					bg.HasUpdate = true
 					if bg.Player.Bust {
 						bg.PlayerTurn = false
+						dealerTurn <- true
 					}
 				})
 
@@ -73,10 +81,48 @@ func update(bg *BlackjackGame) {
 				stayButton.SetSelectedFunc(func() {
 					bg.PlayerTurn = false
 					bg.HasUpdate = true
+					dealerTurn <- true
 				})
 
 				statusFlex.AddItem(hitButton, 0, 1, false)
 				statusFlex.AddItem(stayButton, 0, 1, true)
+				app.SetFocus(statusFlex)
+			}
+
+			if bg.HandComplete {
+				winner := bg.getWinner()
+
+				verb := "won"
+				if winner == nil {
+					verb = "tied"
+				} else if winner.IsDealer {
+					verb = "lost"
+				}
+
+				resultStr := "you " + strings.ToUpper(verb) + " do you want to play another hand?"
+				gameOver := tview.NewTextView().SetText(resultStr).SetTextAlign(1)
+
+				yesButton = tview.NewButton("yes")
+				yesButton.SetBackgroundColorActivated(tcell.ColorGreen)
+				yesButton.SetBorder(true)
+				yesButton.SetSelectedFunc(func() {
+					bg.HandComplete = false
+					bg.HasUpdate = true
+					continuePlaying <- true
+				})
+
+				noButton = tview.NewButton("no")
+				noButton.SetBackgroundColorActivated(tcell.ColorRed)
+				noButton.SetBorder(true)
+				noButton.SetSelectedFunc(func() {
+					continuePlaying <- false
+					app.Stop()
+				})
+
+				statusFlex.Clear()
+				statusFlex.AddItem(gameOver, 0, 2, false)
+				statusFlex.AddItem(yesButton, 0, 1, true)
+				statusFlex.AddItem(noButton, 0, 1, false)
 				app.SetFocus(statusFlex)
 			}
 		})
@@ -88,10 +134,7 @@ func update(bg *BlackjackGame) {
 func Play(bg *BlackjackGame) {
 	bg.Deck.ShuffleRemaining()
 
-	continueGame := true
-
-	// Loop until the player decides they don't want to play anymore.
-	for continueGame {
+	for bg.ContinuePlaying {
 		if len(bg.Deck.Cards) < 26 {
 			bg.Deck.ReShuffle()
 		}
@@ -99,13 +142,19 @@ func Play(bg *BlackjackGame) {
 		bg.deal()
 		bg.HasUpdate = true
 
-		bg.takeTurn()
+		bg.PlayerTurn = true
 
-		winner := getWinner(bg.Player, bg.Dealer)
-		continueGame = winner.handleHandEnd()
+		<-dealerTurn
+		for bg.Dealer.Hand.Total < 17 {
+			c, _ := bg.Deck.DealOne()
+			bg.Dealer.addCard(*c)
+			bg.HasUpdate = true
+		}
+
+		bg.HandComplete = true
+		bg.HasUpdate = true
+		bg.ContinuePlaying = <-continuePlaying
 	}
-
-	fmt.Println("thanks for playing!")
 }
 
 func StartGame() {
@@ -118,7 +167,11 @@ func StartGame() {
 			Hand:     Hand{},
 			IsDealer: true,
 		},
-		Deck: deck.NewDeck(),
+		Deck:            deck.NewDeck(),
+		HasUpdate:       true,
+		PlayerTurn:      false,
+		HandComplete:    false,
+		ContinuePlaying: true,
 	}
 
 	app = tview.NewApplication()
@@ -147,6 +200,10 @@ func StartGame() {
 				app.SetFocus(stayButton)
 			case stayButton.HasFocus():
 				app.SetFocus(hitButton)
+			case yesButton.HasFocus():
+				app.SetFocus(noButton)
+			case noButton.HasFocus():
+				app.SetFocus(yesButton)
 			}
 		}
 		return event
@@ -154,8 +211,8 @@ func StartGame() {
 
 	go update(bg)
 	go Play(bg)
+
 	if err := app.SetRoot(flex, true).SetFocus(statusFlex).Run(); err != nil {
 		panic(err)
 	}
-
 }
