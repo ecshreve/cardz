@@ -2,6 +2,8 @@ package deck
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/samsarahq/go/oops"
 )
@@ -124,4 +126,10 @@ func (d *Deck) DealMany(numToDeal int) ([]Card, error) {
 	d.Cards = d.Cards[numToDeal:]
 
 	return cards, nil
+}
+
+// Shuffle is pretty self-explanatory, it shuffles the Deck.
+func (d *Deck) Shuffle() {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(d.Cards), func(i, j int) { d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i] })
 }
