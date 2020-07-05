@@ -110,5 +110,4 @@ func (d *Deck) DealOne() (*Card, error) {
 	d.Cards = append(d.Cards[:0], d.Cards[1:]...)
 
 	return &dealt, nil
-
 }
