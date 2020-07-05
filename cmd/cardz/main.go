@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"github.com/kr/pretty"
+
+	"github.com/ecshreve/cardz/internal/deck"
+)
 
 func main() {
-	fmt.Println("hello world")
+	d := deck.NewDeck()
+	c, _ := d.DealOne()
+	pretty.Print(c)
 }
