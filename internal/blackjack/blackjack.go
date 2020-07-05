@@ -2,6 +2,7 @@ package blackjack
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/rivo/tview"
 
@@ -19,12 +20,18 @@ var actionButtons *tview.Form
 func update(player, dealer *Player) {
 	app.QueueUpdateDraw(func() {
 		playerFlex.Clear()
+		playerScore := tview.NewTextView().SetText(strconv.Itoa(player.Hand.Total)).SetTextAlign(1)
+		playerScore.SetBorder(true)
+		playerFlex.AddItem(playerScore, 10, 0, false)
 		for _, card := range player.Hand.Cards {
 			playerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
 			playerFlex.AddItem(playerArea, 0, 1, false)
 		}
 
 		dealerFlex.Clear()
+		dealerScore := tview.NewTextView().SetText(strconv.Itoa(dealer.Hand.Total)).SetTextAlign(1)
+		dealerScore.SetBorder(true)
+		dealerFlex.AddItem(dealerScore, 10, 1, false)
 		for _, card := range dealer.Hand.Cards {
 			dealerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
 			dealerFlex.AddItem(dealerArea, 0, 1, false)
@@ -66,20 +73,21 @@ func StartGame() {
 	app = tview.NewApplication()
 	tview.Styles = customCliTheme
 
-	actionButtons = tview.NewForm().SetButtonsAlign(1)
+	actionButtons = tview.NewForm().SetButtonsAlign(tview.AlignCenter)
 	dealerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
 	playerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
 
-	dealerFlex.SetBorder(true).SetTitle("dealer").SetBorderPadding(0, 1, 1, 1)
+	dealerFlex.SetBorder(true).SetTitle("dealer").SetBorderPadding(1, 1, 1, 1)
 	playerFlex.SetBorder(true).SetTitle("player").SetBorderPadding(1, 1, 1, 1)
 	actionButtons.SetHorizontal(true).SetBorder(true)
+	actionButtons.SetItemPadding(3).SetBorderPadding(1, 0, 1, 1)
 
 	flex := tview.NewFlex().
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-			AddItem(actionButtons, 0, 1, false).
 			AddItem(dealerFlex, 0, 2, false).
-			AddItem(playerFlex, 0, 2, false), 0, 5, false).
-		AddItem(tview.NewBox().SetBorder(true).SetTitle("History"), 20, 1, false)
+			AddItem(playerFlex, 0, 2, false).
+			AddItem(actionButtons, 0, 1, false), 0, 5, false).
+		AddItem(tview.NewBox().SetBorder(true).SetTitle("stats"), 20, 1, false)
 	flex.SetBackgroundColor(tview.Styles.PrimitiveBackgroundColor)
 
 	go Play()

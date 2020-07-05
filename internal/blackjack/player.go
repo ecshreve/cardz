@@ -1,6 +1,8 @@
 package blackjack
 
 import (
+	"strconv"
+
 	"github.com/ecshreve/cardz/internal/deck"
 	"github.com/rivo/tview"
 )
@@ -19,6 +21,9 @@ func (p *Player) dealerTurn(d *deck.Deck) {
 
 		app.QueueUpdateDraw(func() {
 			dealerFlex.Clear()
+			dealerScore := tview.NewTextView().SetText(strconv.Itoa(p.Hand.Total)).SetTextAlign(1)
+			dealerScore.SetBorder(true)
+			dealerFlex.AddItem(dealerScore, 10, 1, false)
 			for _, card := range p.Hand.Cards {
 				dealerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
 				dealerFlex.AddItem(dealerArea, 0, 1, false)
@@ -42,10 +47,14 @@ func (p *Player) takeTurn(d *deck.Deck) {
 				c, _ := d.DealOne()
 				p.addCard(*c)
 				playerFlex.Clear()
+				playerScore := tview.NewTextView().SetText(strconv.Itoa(p.Hand.Total)).SetTextAlign(1)
+				playerScore.SetBorder(true)
+				playerFlex.AddItem(playerScore, 10, 0, false)
 				for _, card := range p.Hand.Cards {
 					playerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
 					playerFlex.AddItem(playerArea, 0, 1, false)
 				}
+
 				if p.Bust {
 					turnDone = true
 					return
