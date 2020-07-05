@@ -1,11 +1,8 @@
 package blackjack
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-
 	"github.com/ecshreve/cardz/internal/deck"
+	"github.com/rivo/tview"
 )
 
 // Player represents either a human player or the CPU dealer.
@@ -19,11 +16,14 @@ func (p *Player) dealerTurn(d *deck.Deck) {
 	for p.Hand.Total < 17 {
 		c, _ := d.DealOne()
 		p.addCard(*c)
-		fmt.Printf("---\ndealer:\n")
-		fmt.Println(p.Hand)
-	}
-	if p.Bust {
-		fmt.Println("dealer busted :)")
+
+		app.QueueUpdateDraw(func() {
+			dealerFlex.Clear()
+			for _, card := range p.Hand.Cards {
+				dealerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
+				dealerFlex.AddItem(dealerArea, 0, 1, false)
+			}
+		})
 	}
 }
 
@@ -34,38 +34,38 @@ func (p *Player) takeTurn(d *deck.Deck) {
 		return
 	}
 
-	for {
-		fmt.Println("press 'h' to hit, or 's' to stand; followed by 'enter'")
-		reader := bufio.NewReader(os.Stdin)
-		char, _, err := reader.ReadRune()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		switch char {
-		case 'h':
-			c, _ := d.DealOne()
-			p.addCard(*c)
-			fmt.Printf("---\nplayer:\n")
-			fmt.Println(p.Hand)
-			if p.Bust {
-				fmt.Println("busted :(")
+	turnDone := false
+	for !turnDone {
+		app.QueueUpdateDraw(func() {
+			actionButtons.Clear(true)
+			actionButtons.AddButton("HIT", func() {
+				c, _ := d.DealOne()
+				p.addCard(*c)
+				playerFlex.Clear()
+				for _, card := range p.Hand.Cards {
+					playerArea := tview.NewTextView().SetText(card.PrettyPrint()).SetTextAlign(1)
+					playerFlex.AddItem(playerArea, 0, 1, false)
+				}
+				if p.Bust {
+					turnDone = true
+					return
+				}
+			})
+			actionButtons.AddButton("STAY", func() {
+				turnDone = true
 				return
-			}
-			break
-		case 's':
-			fmt.Printf("player stands at %d\n", p.Hand.Total)
-			return
-		}
+			})
+			app.SetFocus(actionButtons).Run()
+		})
 	}
 }
 
 // handleHandEnd prints a game over message and checks if the player wants to continue.
 func (p Player) handleHandEnd() bool {
-	retStr := "yay you won!"
-	if p.IsDealer {
-		retStr = "better luck next time!"
-	}
-	fmt.Println(retStr)
+	// retStr := "yay you won!"
+	// if p.IsDealer {
+	// 	retStr = "better luck next time!"
+	// }
+	// fmt.Println(retStr)
 	return continueGame()
 }

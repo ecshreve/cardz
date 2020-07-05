@@ -12,6 +12,9 @@ var app *tview.Application
 var statsArea *tview.TextView
 var dealerFlex *tview.Flex
 var playerFlex *tview.Flex
+var hitButton *tview.Button
+var stayButton *tview.Button
+var actionButtons *tview.Form
 
 func update(player, dealer *Player) {
 	app.QueueUpdateDraw(func() {
@@ -63,16 +66,17 @@ func StartGame() {
 	app = tview.NewApplication()
 	tview.Styles = customCliTheme
 
-	statsArea = tview.NewTextView().SetText("test").SetTextAlign(1)
-	statsArea.SetBorder(true).SetTitle("stats").SetBorderPadding(0, 1, 1, 1)
+	actionButtons = tview.NewForm().SetButtonsAlign(1)
 	dealerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
 	playerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
+
 	dealerFlex.SetBorder(true).SetTitle("dealer").SetBorderPadding(0, 1, 1, 1)
 	playerFlex.SetBorder(true).SetTitle("player").SetBorderPadding(1, 1, 1, 1)
+	actionButtons.SetHorizontal(true).SetBorder(true)
 
 	flex := tview.NewFlex().
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-			AddItem(statsArea, 0, 1, false).
+			AddItem(actionButtons, 0, 1, false).
 			AddItem(dealerFlex, 0, 2, false).
 			AddItem(playerFlex, 0, 2, false), 0, 5, false).
 		AddItem(tview.NewBox().SetBorder(true).SetTitle("History"), 20, 1, false)
