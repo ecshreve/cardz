@@ -28,38 +28,55 @@ func (s Suit) String() string {
 	return suitNames[int(s)]
 }
 
-// CardValueToCodeMap maps a Card.Value to a Card's single character code.
-var CardValueToCodeMap = map[int]string{
-	1:  "A",
-	2:  "2",
-	3:  "3",
-	4:  "4",
-	5:  "5",
-	6:  "6",
-	7:  "7",
-	8:  "8",
-	9:  "9",
-	10: "T",
-	11: "J",
-	12: "Q",
-	13: "K",
+// CardCodes are all the possible single char codes.
+var CardCodes = []string{
+	"A",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	"T",
+	"J",
+	"Q",
+	"K",
 }
 
-// CardValueToNameMap maps a Card.Value to a Card's string name.
-var CardValueToNameMap = map[int]string{
-	1:  "ace",
-	2:  "two",
-	3:  "three",
-	4:  "four",
-	5:  "five",
-	6:  "six",
-	7:  "seven",
-	8:  "eight",
-	9:  "nine",
-	10: "ten",
-	11: "jack",
-	12: "queen",
-	13: "king",
+// CardCodeToValueMap maps a Card.Code to a Card's Value.
+var CardCodeToValueMap = map[string]int{
+	"A": 1,
+	"2": 2,
+	"3": 3,
+	"4": 4,
+	"5": 5,
+	"6": 6,
+	"7": 7,
+	"8": 8,
+	"9": 9,
+	"T": 10,
+	"J": 10,
+	"Q": 10,
+	"K": 10,
+}
+
+// CardCodeToNameMap maps a Card.code to a Card's string name.
+var CardCodeToNameMap = map[string]string{
+	"A": "ace",
+	"2": "two",
+	"3": "three",
+	"4": "four",
+	"5": "five",
+	"6": "six",
+	"7": "seven",
+	"8": "eight",
+	"9": "nine",
+	"T": "ten",
+	"J": "jack",
+	"Q": "queen",
+	"K": "king",
 }
 
 // Card is a single playing card within a Deck.
@@ -88,12 +105,12 @@ func NewDeck() *Deck {
 		Dealt: []Card{},
 	}
 	for _, suit := range []Suit{Hearts, Diamonds, Clubs, Spades} {
-		for i := 1; i <= 13; i++ {
+		for _, code := range CardCodes {
 			c := Card{
-				Name:  CardValueToNameMap[i],
+				Name:  CardCodeToNameMap[code],
 				Suit:  suit,
-				Code:  CardValueToCodeMap[i],
-				Value: i,
+				Code:  code,
+				Value: CardCodeToValueMap[code],
 			}
 			d.Cards = append(d.Cards, c)
 		}
