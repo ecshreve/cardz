@@ -26,7 +26,7 @@ var CardCodes = []string{
 
 // CardCodeToValueMap maps a Card.Code to a Card's Value.
 var CardCodeToValueMap = map[string]int{
-	"A": 1,
+	"A": 11,
 	"2": 2,
 	"3": 3,
 	"4": 4,

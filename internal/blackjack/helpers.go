@@ -3,28 +3,48 @@ package blackjack
 import (
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
+	"github.com/samsarahq/go/oops"
 )
 
-// deal clears the player and dealer Hands and deals the first two Cards.
-func (bg *BlackjackGame) deal() {
+// deal clears the player and dealer Hands, resets the Game HandComplete
+// field, and deals the first two Cards if this Hand.
+func (bg *Game) deal() error {
 	bg.Player.Hand = Hand{}
 	bg.Dealer.Hand = Hand{}
+	bg.HandComplete = false
 
-	c, _ := bg.Deck.DealOne()
+	c, err := bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Player.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Dealer.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Player.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Dealer.Hand.addCard(*c)
+
+	return nil
 }
 
 // getWinner returns the winning Player, or nil in the case of a push.
-func (bg BlackjackGame) getWinner() *Player {
+func (bg Game) getWinner() *Player {
+	if bg.Player.Blackjack {
+		return bg.Player
+	}
 	if bg.Player.Bust {
 		return bg.Dealer
 	}
@@ -41,9 +61,12 @@ func (bg BlackjackGame) getWinner() *Player {
 		return bg.Dealer
 	}
 
+	// Nether the Player nor the Dealer busted and neither has a larger total
+	// so the Hand was a push.
 	return nil
 }
 
+// customCliTheme holds the color theme for the tview TUI.
 var customCliTheme = tview.Theme{
 	PrimitiveBackgroundColor:    tcell.Color(272727),
 	ContrastBackgroundColor:     tcell.Color(448488),
