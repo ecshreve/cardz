@@ -2,6 +2,7 @@ package blackjack
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -14,15 +15,24 @@ type Stats struct {
 	Total int
 }
 
-func (st *Stats) Load() {
+func (st Stats) String() string {
+	return fmt.Sprintf(`W:   %d
+	 					L:   %d
+	 					T:   %d
+	 					TOT: %d`, st.Win, st.Loss, st.Tie, st.Total)
+}
+
+func LoadStats() *Stats {
 	f, err := os.Open("persist.json")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 
+	var st Stats
 	byteValue, _ := ioutil.ReadAll(f)
 	json.Unmarshal(byteValue, &st)
+	return &st
 }
 
 func (st *Stats) Save() {
@@ -34,17 +44,9 @@ func (st *Stats) Save() {
 	dir, _ := os.Getwd()
 	fname := dir + "/persist.json"
 
-	// If the file doesn't exist, create it, or append to the file
-	f, err := os.OpenFile(fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	err = ioutil.WriteFile(fname, jsonStats, 0644)
 	if err != nil {
-		log.Fatal(err)
-	}
-	if _, err := f.Write(append(jsonStats, []byte("\n")...)); err != nil {
-		f.Close() // ignore error; Write error takes precedence
-		log.Fatal(err)
-	}
-	if err := f.Close(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 

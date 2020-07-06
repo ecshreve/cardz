@@ -81,6 +81,11 @@ func update(bg *Game) {
 				dealerFlex.AddItem(dealerArea, 0, 1, false)
 			}
 
+			infoFlex.RemoveItem(statsText)
+			statsText = tview.NewTextView().SetText(fmt.Sprint(bg.Stats)).SetTextAlign(0).SetWordWrap(true)
+			statsText.SetBorder(true).SetBorderPadding(1, 0, 1, 1).SetTitle(" stats ").SetBorderAttributes(tcell.AttrBlink)
+			infoFlex.AddItem(statsText, 0, 2, false)
+
 			// Update the status box on the Player's turn so the Player can
 			// choose to hit or stay.
 			if bg.PlayerTurn {
@@ -233,7 +238,7 @@ func StartGame() {
 			IsDealer: true,
 		},
 		Deck:            deck.NewDeck(),
-		Stats:           &Stats{},
+		Stats:           LoadStats(),
 		Winner:          nil,
 		PlayerTurn:      false,
 		HandComplete:    false,
@@ -254,12 +259,9 @@ func StartGame() {
 	statusFlex.SetBorder(true)
 	infoFlex.SetBorder(true).SetBorderPadding(0, 0, 1, 1)
 
-	statsText = tview.NewTextView().SetText("these will be stats").SetTextAlign(0).SetWordWrap(true)
-	statsText.SetBorder(true).SetBorderPadding(1, 0, 1, 1).SetTitle(" stats ").SetBorderAttributes(tcell.AttrBlink)
 	historyText = tview.NewTextView().SetDynamicColors(true).SetText("action history...").SetTextAlign(0).SetWordWrap(true)
 	historyText.SetBorder(true).SetBorderPadding(1, 0, 1, 1).SetTitle(" history ")
 
-	infoFlex.AddItem(statsText, 0, 2, false)
 	infoFlex.AddItem(historyText, 0, 2, false)
 
 	// Attach our flex boxes to the outer flex container.
