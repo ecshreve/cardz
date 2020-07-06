@@ -15,15 +15,17 @@ import (
 // These are declared here because they need to be accessible by both goroutines
 // and it was the quickes and easiest way to achieve that.
 var (
-	app        *tview.Application
-	dealerFlex *tview.Flex
-	playerFlex *tview.Flex
-	statusFlex *tview.Flex
-	infoFlex   *tview.Flex
-	hitButton  *tview.Button
-	stayButton *tview.Button
-	yesButton  *tview.Button
-	noButton   *tview.Button
+	app         *tview.Application
+	dealerFlex  *tview.Flex
+	playerFlex  *tview.Flex
+	statusFlex  *tview.Flex
+	infoFlex    *tview.Flex
+	historyText *tview.TextView
+	statsText   *tview.TextView
+	hitButton   *tview.Button
+	stayButton  *tview.Button
+	yesButton   *tview.Button
+	noButton    *tview.Button
 )
 
 // These three channels are used to coordinate exeuction between the two goroutines.
@@ -155,13 +157,17 @@ func Play(bg *Game) {
 
 		// Deal the initial Hands to the Player and Dealer and send a message
 		// to the channel so we update the UI.
-		bg.deal()
+		err := bg.deal()
+		if err != nil {
+			fmt.Println(err)
+		}
 		bg.PlayerTurn = true
 		hasUpdate <- true
 
 		// Process the Player's turn.
 		bg.PlayerTurn = <-playerHit
 		for bg.PlayerTurn {
+			fmt.Fprintln(historyText, "player hits on ", bg.Player.Total, "\n-")
 			// Deal a Card to the Player and update the UI.
 			c, err := bg.Deck.DealOne()
 			if err != nil {
@@ -172,6 +178,7 @@ func Play(bg *Game) {
 
 			// If the Player busted then we can early exit and skip the Dealer loop.
 			if bg.Player.Bust {
+				fmt.Fprintln(historyText, "player busts\n-")
 				bg.PlayerTurn = false
 				break
 			}
@@ -183,6 +190,8 @@ func Play(bg *Game) {
 		// If the Player busted then we don't need to process the Dealer's turn.
 		if !bg.Player.Bust {
 			for bg.Dealer.Hand.Total < 17 {
+				fmt.Fprintln(historyText, "dealer hits on ", bg.Dealer.Total, "\n-")
+
 				// Deal a Card to the Dealer, update the UI and wait 3 seconds
 				// before Dealer makes their next move.
 				c, err := bg.Deck.DealOne()
@@ -191,6 +200,9 @@ func Play(bg *Game) {
 				}
 				bg.Dealer.addCard(*c)
 				hasUpdate <- true
+			}
+			if bg.Dealer.Total > 21 {
+				fmt.Fprintln(historyText, "dealer busts\n-")
 			}
 		}
 
@@ -238,10 +250,10 @@ func StartGame() {
 	statusFlex.SetBorder(true)
 	infoFlex.SetBorder(true).SetBorderPadding(0, 0, 1, 1)
 
-	statsText := tview.NewTextView().SetText("these will be stats").SetTextAlign(0).SetWordWrap(true)
-	statsText.SetBorder(true).SetBorderPadding(1, 1, 1, 1).SetTitle(" stats ").SetBorderAttributes(tcell.AttrBlink)
-	historyText := tview.NewTextView().SetText("this will be history").SetTextAlign(0).SetWordWrap(true)
-	historyText.SetBorder(true).SetBorderPadding(1, 1, 1, 1).SetTitle(" history ")
+	statsText = tview.NewTextView().SetText("these will be stats").SetTextAlign(0).SetWordWrap(true)
+	statsText.SetBorder(true).SetBorderPadding(1, 0, 1, 1).SetTitle(" stats ").SetBorderAttributes(tcell.AttrBlink)
+	historyText = tview.NewTextView().SetDynamicColors(true).SetText("action history...").SetTextAlign(0).SetWordWrap(true)
+	historyText.SetBorder(true).SetBorderPadding(1, 0, 1, 1).SetTitle(" history ")
 
 	infoFlex.AddItem(statsText, 0, 2, false)
 	infoFlex.AddItem(historyText, 0, 2, false)
@@ -252,7 +264,7 @@ func StartGame() {
 			AddItem(dealerFlex, 0, 2, false).
 			AddItem(playerFlex, 0, 2, false).
 			AddItem(statusFlex, 0, 1, false), 0, 5, false).
-		AddItem(infoFlex, 25, 1, false)
+		AddItem(infoFlex, 26, 1, false)
 	flex.SetBackgroundColor(tview.Styles.PrimitiveBackgroundColor)
 
 	// Explicitly configure input handling for these specific Keys. tview has some
