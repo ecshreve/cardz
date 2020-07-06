@@ -46,6 +46,8 @@ type Game struct {
 	Player          *Player
 	Dealer          *Player
 	Deck            *deck.Deck
+	Stats           *Stats
+	Winner          *Player
 	PlayerTurn      bool
 	HandComplete    bool
 	ContinuePlaying bool
@@ -231,6 +233,8 @@ func StartGame() {
 			IsDealer: true,
 		},
 		Deck:            deck.NewDeck(),
+		Stats:           &Stats{},
+		Winner:          nil,
 		PlayerTurn:      false,
 		HandComplete:    false,
 		ContinuePlaying: true,

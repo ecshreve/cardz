@@ -2,7 +2,6 @@ package blackjack
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -33,19 +32,31 @@ func (st *Stats) Save() {
 	}
 
 	dir, _ := os.Getwd()
-	fname := dir + "persist.json"
-	fmt.Println(fname)
+	fname := dir + "/persist.json"
 
 	// If the file doesn't exist, create it, or append to the file
 	f, err := os.OpenFile(fname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if _, err := f.Write(jsonStats); err != nil {
+	if _, err := f.Write(append(jsonStats, []byte("\n")...)); err != nil {
 		f.Close() // ignore error; Write error takes precedence
 		log.Fatal(err)
 	}
 	if err := f.Close(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (bg *Game) UpdateStats() {
+	bg.Stats.Total++
+	if bg.Winner == nil {
+		bg.Stats.Tie++
+		return
+	}
+	if bg.Winner.IsDealer {
+		bg.Stats.Loss++
+		return
+	}
+	bg.Stats.Win++
 }

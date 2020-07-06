@@ -42,28 +42,26 @@ func (bg *Game) deal() error {
 
 // getWinner returns the winning Player, or nil in the case of a push.
 func (bg Game) getWinner() *Player {
-	if bg.Player.Blackjack {
-		return bg.Player
-	}
-	if bg.Player.Bust {
-		return bg.Dealer
-	}
-
-	if bg.Dealer.Bust {
-		return bg.Player
-	}
-
-	if bg.Player.Total > bg.Dealer.Total {
-		return bg.Player
-	}
-
-	if bg.Dealer.Total > bg.Player.Total {
-		return bg.Dealer
+	var winner *Player
+	switch {
+	case bg.Player.Blackjack:
+		winner = bg.Player
+	case bg.Player.Bust:
+		winner = bg.Dealer
+	case bg.Dealer.Bust:
+		winner = bg.Player
+	case bg.Player.Total > bg.Dealer.Total:
+		winner = bg.Player
+	case bg.Dealer.Total > bg.Player.Total:
+		winner = bg.Dealer
+	default:
+		winner = nil
 	}
 
-	// Nether the Player nor the Dealer busted and neither has a larger total
-	// so the Hand was a push.
-	return nil
+	bg.Winner = winner
+	bg.UpdateStats()
+	bg.Stats.Save()
+	return winner
 }
 
 // customCliTheme holds the color theme for the tview TUI.
