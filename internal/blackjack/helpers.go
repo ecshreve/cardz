@@ -3,47 +3,68 @@ package blackjack
 import (
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
+	"github.com/samsarahq/go/oops"
 )
 
-// deal clears the player and dealer Hands and deals the first two Cards.
-func (bg *BlackjackGame) deal() {
+// deal clears the player and dealer Hands, resets the Game HandComplete
+// field, and deals the first two Cards if this Hand.
+func (bg *Game) deal() error {
 	bg.Player.Hand = Hand{}
 	bg.Dealer.Hand = Hand{}
+	bg.HandComplete = false
 
-	c, _ := bg.Deck.DealOne()
+	c, err := bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Player.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Dealer.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Player.Hand.addCard(*c)
 
-	c, _ = bg.Deck.DealOne()
+	c, err = bg.Deck.DealOne()
+	if err != nil {
+		return oops.Wrapf(err, "error dealing initial hands")
+	}
 	bg.Dealer.Hand.addCard(*c)
-}
-
-// getWinner returns the winning Player, or nil in the case of a push.
-func (bg BlackjackGame) getWinner() *Player {
-	if bg.Player.Bust {
-		return bg.Dealer
-	}
-
-	if bg.Dealer.Bust {
-		return bg.Player
-	}
-
-	if bg.Player.Total > bg.Dealer.Total {
-		return bg.Player
-	}
-
-	if bg.Dealer.Total > bg.Player.Total {
-		return bg.Dealer
-	}
 
 	return nil
 }
 
+// getWinner returns the winning Player, or nil in the case of a push.
+func (bg Game) getWinner() *Player {
+	var winner *Player
+	switch {
+	case bg.Player.Blackjack:
+		winner = bg.Player
+	case bg.Player.Bust:
+		winner = bg.Dealer
+	case bg.Dealer.Bust:
+		winner = bg.Player
+	case bg.Player.Total > bg.Dealer.Total:
+		winner = bg.Player
+	case bg.Dealer.Total > bg.Player.Total:
+		winner = bg.Dealer
+	default:
+		winner = nil
+	}
+
+	bg.Winner = winner
+	bg.UpdateStats()
+	bg.Stats.Save()
+	return winner
+}
+
+// customCliTheme holds the color theme for the tview TUI.
 var customCliTheme = tview.Theme{
 	PrimitiveBackgroundColor:    tcell.Color(272727),
 	ContrastBackgroundColor:     tcell.Color(448488),
