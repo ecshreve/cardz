@@ -2,6 +2,7 @@ package blackjack
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -18,6 +19,7 @@ var (
 	dealerFlex *tview.Flex
 	playerFlex *tview.Flex
 	statusFlex *tview.Flex
+	infoFlex   *tview.Flex
 	hitButton  *tview.Button
 	stayButton *tview.Button
 	yesButton  *tview.Button
@@ -56,6 +58,7 @@ func update(bg *Game) {
 			playerFlex.Clear()
 			playerScore := tview.NewTextView().SetText(strconv.Itoa(bg.Player.Hand.Total)).SetTextAlign(1)
 			playerScore.SetBorder(true).SetBorderPadding(2, 2, 0, 0)
+			playerScore.SetBorderAttributes(tcell.AttrBlink).SetBorderColor(tcell.ColorLightGreen)
 
 			dealerFlex.Clear()
 			dealerScore := tview.NewTextView().SetText(strconv.Itoa(bg.Dealer.Hand.Total)).SetTextAlign(1)
@@ -228,10 +231,20 @@ func StartGame() {
 	dealerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
 	playerFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
 	statusFlex = tview.NewFlex().SetDirection(tview.FlexColumn)
+	infoFlex = tview.NewFlex().SetDirection(tview.FlexRow)
 
-	dealerFlex.SetBorder(true).SetTitle("dealer").SetBorderPadding(1, 1, 1, 1)
-	playerFlex.SetBorder(true).SetTitle("player").SetBorderPadding(1, 1, 1, 1)
+	dealerFlex.SetBorder(true).SetTitle(" dealer ").SetBorderPadding(1, 1, 1, 1)
+	playerFlex.SetBorder(true).SetTitle(" player ").SetBorderPadding(1, 1, 1, 1)
 	statusFlex.SetBorder(true)
+	infoFlex.SetBorder(true).SetBorderPadding(0, 0, 1, 1)
+
+	statsText := tview.NewTextView().SetText("these will be stats").SetTextAlign(0).SetWordWrap(true)
+	statsText.SetBorder(true).SetBorderPadding(1, 1, 1, 1).SetTitle(" stats ").SetBorderAttributes(tcell.AttrBlink)
+	historyText := tview.NewTextView().SetText("this will be history").SetTextAlign(0).SetWordWrap(true)
+	historyText.SetBorder(true).SetBorderPadding(1, 1, 1, 1).SetTitle(" history ")
+
+	infoFlex.AddItem(statsText, 0, 2, false)
+	infoFlex.AddItem(historyText, 0, 2, false)
 
 	// Attach our flex boxes to the outer flex container.
 	flex := tview.NewFlex().
@@ -239,7 +252,7 @@ func StartGame() {
 			AddItem(dealerFlex, 0, 2, false).
 			AddItem(playerFlex, 0, 2, false).
 			AddItem(statusFlex, 0, 1, false), 0, 5, false).
-		AddItem(tview.NewBox().SetBorder(true).SetTitle("stats"), 20, 1, false)
+		AddItem(infoFlex, 25, 1, false)
 	flex.SetBackgroundColor(tview.Styles.PrimitiveBackgroundColor)
 
 	// Explicitly configure input handling for these specific Keys. tview has some
@@ -256,6 +269,14 @@ func StartGame() {
 				app.SetFocus(noButton)
 			case noButton.HasFocus():
 				app.SetFocus(yesButton)
+			}
+		}
+
+		if event.Key() == tcell.KeyRune {
+			switch event.Rune() {
+			case 'q':
+				app.Stop()
+				os.Exit(0)
 			}
 		}
 		return event
